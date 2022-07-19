@@ -60,10 +60,16 @@ async function getFiles(rootPath) {
 
 const getChapterNumber = (fileName: string): number | null => {
   if (fileName.includes('.')) {
-    return Number(fileName.substring(0, fileName.indexOf('.')));
+    const num = Number(fileName.substring(0, fileName.indexOf('.')));
+    if (!isNaN(num)) {
+      return num;
+    }
   }
   if (fileName.includes('-')) {
-    return Number(fileName.substring(0, fileName.indexOf('-')));
+    const num = Number(fileName.substring(0, fileName.indexOf('-')));
+    if (!isNaN(num)) {
+      return num;
+    }
   }
 
   return null;
