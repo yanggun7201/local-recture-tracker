@@ -58,15 +58,22 @@ async function getFiles(rootPath) {
   return results;
 }
 
+const MAXIMUM_NUMBER_LENGTH = 3;
+
+function parseChapterNumber(fileName: string, searchString: string) {
+  const end = Math.min(fileName.indexOf(searchString), MAXIMUM_NUMBER_LENGTH);
+  return fileName.substring(0, end);
+}
+
 const getChapterNumber = (fileName: string): number | null => {
   if (fileName.includes('.')) {
-    const num = Number(fileName.substring(0, fileName.indexOf('.')));
+    const num = Number(parseChapterNumber(fileName, '.'));
     if (!isNaN(num)) {
       return num;
     }
   }
   if (fileName.includes('-')) {
-    const num = Number(fileName.substring(0, fileName.indexOf('-')));
+    const num = Number(parseChapterNumber(fileName, '-'));
     if (!isNaN(num)) {
       return num;
     }
