@@ -11,15 +11,16 @@ export class AppService {
   }
 }
 
-async function getFiles(rootPath) {
+async function filteredSortedFileNames(rootPath) {
   let fileNames;
   try {
     fileNames = await fsPromises.readdir(rootPath);
   } catch (error) {
     console.log(error);
+    return [];
   }
 
-  const filteredFileNames = fileNames
+  return fileNames
     .filter((fileName: string) => !fileName.startsWith('.'))
     .sort((a, b) => {
       const aNum = getChapterNumber(a);
@@ -31,10 +32,14 @@ async function getFiles(rootPath) {
       }
       return a.localeCompare(b);
     });
+}
+
+async function getFiles(rootPath) {
+  const fileNames = await filteredSortedFileNames(rootPath);
 
   const results = [];
-  for (let i = 0; i < filteredFileNames.length; i++) {
-    const fileName = filteredFileNames[i];
+  for (let i = 0; i < fileNames.length; i++) {
+    const fileName = fileNames[i];
 
     let children;
     const isDirectory = fs
